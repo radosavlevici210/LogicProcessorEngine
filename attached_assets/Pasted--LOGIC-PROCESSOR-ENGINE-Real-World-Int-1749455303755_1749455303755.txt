@@ -1,0 +1,68 @@
+# ========================================================
+# LOGIC PROCESSOR ENGINE – Real World Integration System
+# © 2025 Ervin Remus Radosavlevici – All Rights Reserved
+# Email: ervin210@icloud.com | Protected Production Build
+# License: Production, Commercial & Educational Use Allowed
+# ========================================================
+
+extends Node
+
+enum GateType { AND, OR, NOT }
+
+class LogicGate:
+    var gate_type = GateType.AND
+    var input_a = false
+    var input_b = false
+    var output = false
+
+    func process_logic():
+        match gate_type:
+            GateType.AND:
+                output = input_a and input_b
+            GateType.OR:
+                output = input_a or input_b
+            GateType.NOT:
+                output = not input_a
+
+var gates = []
+
+func _ready():
+    # Initialize logic gates
+    var gate1 = LogicGate.new()
+    gate1.gate_type = GateType.AND
+    gate1.input_a = true
+    gate1.input_b = false
+    gate1.process_logic()
+    print("AND output: ", gate1.output)
+
+    var gate2 = LogicGate.new()
+    gate2.gate_type = GateType.NOT
+    gate2.input_a = gate1.output
+    gate2.process_logic()
+    print("NOT output: ", gate2.output)
+
+    gates.append(gate1)
+    gates.append(gate2)
+
+    # Connect to real-world data (weather)
+    get_weather_data()
+
+func get_weather_data():
+    var http = HTTPRequest.new()
+    add_child(http)
+    http.connect("request_completed", self, "_on_request_complete")
+    http.request("https://api.open-meteo.com/v1/forecast?latitude=40&longitude=0&current_weather=true")
+
+func _on_request_complete(result, response_code, headers, body):
+    var json = JSON.new()
+    var parse_result = json.parse(body.get_string_from_utf8())
+    if parse_result == OK:
+        var temp = json.get_data()["current_weather"]["temperature"]
+        print("Current Temperature:", temp)
+        # Use temperature to influence logic
+        if temp > 25:
+            gates[0].input_a = true
+        else:
+            gates[0].input_a = false
+        gates[0].process_logic()
+        print("Updated AND output (from weather):", gates[0].output)
