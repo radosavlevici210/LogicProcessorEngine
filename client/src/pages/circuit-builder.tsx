@@ -6,8 +6,9 @@ import { useWeather } from '@/hooks/useWeather';
 import { ToolsPanel } from '@/components/ToolsPanel';
 import { CircuitCanvas } from '@/components/CircuitCanvas';
 import { OutputPanel } from '@/components/OutputPanel';
+
 import { Button } from '@/components/ui/button';
-import { Microchip, Save, Share } from 'lucide-react';
+import { Microchip, Save, Share, Settings } from 'lucide-react';
 import type { GateType } from '@shared/schema';
 import { apiRequest } from '@/lib/queryClient';
 
@@ -174,19 +175,26 @@ export default function CircuitBuilder() {
           circuitOutputs={circuitOutputs}
         />
 
-        {/* Circuit Canvas */}
-        <CircuitCanvas
-          gates={circuitState.gates}
-          connections={circuitState.connections}
-          onAddGate={addGate}
-          onRemoveGate={removeGate}
-          onUpdateGatePosition={updateGatePosition}
-          onInputChange={handleInputChange}
-          onAddConnection={addConnection}
-          onClearCircuit={clearCircuit}
-          onProcessCircuit={handleProcessCircuit}
-          isProcessing={isProcessing}
-        />
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Circuit Canvas */}
+          <div className="flex-1">
+            <CircuitCanvas
+              gates={circuitState.gates}
+              connections={circuitState.connections}
+              onAddGate={addGate}
+              onRemoveGate={removeGate}
+              onUpdateGatePosition={updateGatePosition}
+              onInputChange={handleInputChange}
+              onAddConnection={addConnection}
+              onClearCircuit={clearCircuit}
+              onProcessCircuit={handleProcessCircuit}
+              isProcessing={isProcessing}
+            />
+          </div>
+
+
+        </div>
 
         {/* Output Panel */}
         <OutputPanel

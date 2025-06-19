@@ -1,0 +1,54 @@
+from replit import db
+import streamlit as st
+
+# Function to restore session state from the database backup
+def restore_from_backup():
+    # Example keys in the database
+    keys_to_restore = ['hashrate_history', 'accepted_shares', 'rejected_shares', 'current_hashrate']
+
+    for key in keys_to_restore:
+        if key in db:
+            st.session_state[key] = db[key]
+        else:
+            st.warning(f"No backup found for {key}")
+
+# Call the restore function at the appropriate point in your app
+if st.button('Restore from Backup'):
+    restore_from_backup()
+    st.success("Session state restored from backup.")-0
++8
+// ========================================================
+// LOGIC PROCESSOR + AI API SYSTEM – Real World Integration
+// © 2025 Ervin Remus Radosavlevici – All Rights Reserved
+// Email: ervin210@icloud.com
+// Timestamp: 2025-06-09T00:00Z
+// License: Use allowed for educational, production, and AI system integration
+// ========================================================
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
++8
+// ========================================================
+// LOGIC PROCESSOR + AI API SYSTEM – Real World Integration
+// © 2025 Ervin Remus Radosavlevici – All Rights Reserved
+// Email: ervin210@icloud.com
+// Timestamp: 2025-06-09T00:00Z
+// License: Use allowed for educational, production, and AI system integration
+// ========================================================
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Cpu, Wifi, Activity, Clock } from "lucide-react";
+
++9
+// ========================================================
+// LOGIC PROCESSOR + AI API SYSTEM – Real World Integration
+// © 2025 Ervin Remus Radosavlevici – All Rights Reserved
+// Email: ervin210@icloud.com
+// Timestamp: 2025-06-09T00:00Z
+// License: Use allowed for educational, production, and AI system integration
+// ========================================================
+export type WebSocketMessage = {
+  type: 'system_status' | 'gate_processed' | 'gate_created' | 'gate_updated' | 'gate_deleted' | 'ai_response' | 'error';
+  type: 'system_status' | 'gate_processed' | 'gate_created' | 'gate_updated' | 'gate_deleted' | 'ai_response' | 'error' | 'performance_metrics';
+  [key: string]: any;
+};
