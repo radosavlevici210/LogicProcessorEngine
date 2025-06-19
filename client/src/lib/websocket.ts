@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 export interface WebSocketMessage {
-  type: 'system_status' | 'gate_processed' | 'gate_created' | 'gate_updated' | 'gate_deleted' | 'ai_response' | 'error' | 'performance_metrics' | 'weather_update' | 'circuit_processed' | 'circuit_saved';
+  type: 'system_status' | 'gate_processed' | 'gate_created' | 'gate_updated' | 'gate_deleted' | 'ai_response' | 'error' | 'performance_metrics' | 'weather_update' | 'circuit_processed' | 'circuit_saved' | 'music_update' | 'physics_update' | 'quantum_resonance' | 'particle_update';
   data: any;
 }
 

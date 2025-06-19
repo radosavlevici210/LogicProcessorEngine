@@ -4,13 +4,15 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import QuantumStudio from "@/pages/quantum-studio";
 import CircuitBuilder from "@/pages/circuit-builder";
 import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={CircuitBuilder}/>
+      <Route path="/" component={QuantumStudio}/>
+      <Route path="/circuit" component={CircuitBuilder}/>
       <Route component={NotFound} />
     </Switch>
   );
