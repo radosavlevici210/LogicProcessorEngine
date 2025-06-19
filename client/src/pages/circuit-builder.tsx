@@ -9,6 +9,8 @@ import { OutputPanel } from '@/components/OutputPanel';
 import { SystemStatus } from '@/components/SystemStatus';
 import { AIInsights } from '@/components/AIInsights';
 import { PerformanceMonitor } from '@/components/PerformanceMonitor';
+import { SimulationPanel } from '@/components/SimulationPanel';
+import { CircuitTemplates } from '@/components/CircuitTemplates';
 
 import { Button } from '@/components/ui/button';
 import { Microchip, Save, Share, Settings } from 'lucide-react';
@@ -129,6 +131,28 @@ export default function CircuitBuilder() {
     addLog(`Gate ${gateId} input ${inputKey} changed to ${value}`, 'info');
   }, [addLog]);
 
+  const handleSimulationStep = useCallback(() => {
+    processCircuit(weatherData.logicState);
+    addLog('Simulation step executed', 'info');
+  }, [processCircuit, weatherData.logicState, addLog]);
+
+  const handleResetSimulation = useCallback(() => {
+    clearCircuit();
+    addLog('Simulation reset', 'info');
+  }, [clearCircuit, addLog]);
+
+  const handleLoadTemplate = useCallback((template: any) => {
+    // Clear existing circuit
+    clearCircuit();
+    
+    // Add gates from template
+    template.gates.forEach((gateTemplate: any) => {
+      addGate(gateTemplate.type, gateTemplate.position);
+    });
+    
+    addLog(`Loaded template: ${template.name}`, 'success');
+  }, [clearCircuit, addGate, addLog]);
+
   const circuitOutputs = circuitState.gates.map(gate => ({
     id: gate.id,
     type: gate.type,
@@ -212,6 +236,21 @@ export default function CircuitBuilder() {
           {/* System Status */}
           <div className="p-4 border-b border-slate-200">
             <SystemStatus />
+          </div>
+
+          {/* Simulation Controls */}
+          <div className="p-4 border-b border-slate-200">
+            <SimulationPanel
+              gates={circuitState.gates}
+              connections={circuitState.connections}
+              onSimulationStep={handleSimulationStep}
+              onResetSimulation={handleResetSimulation}
+            />
+          </div>
+
+          {/* Circuit Templates */}
+          <div className="p-4 border-b border-slate-200">
+            <CircuitTemplates onLoadTemplate={handleLoadTemplate} />
           </div>
 
           {/* Performance Monitor */}

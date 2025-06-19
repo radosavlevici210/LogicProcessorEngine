@@ -17,7 +17,11 @@ interface ToolsPanelProps {
 const gateTypes: Array<{ type: GateType; symbol: string; color: string; description: string }> = [
   { type: 'AND', symbol: '&', color: 'bg-blue-500', description: 'Output true when both inputs are true' },
   { type: 'OR', symbol: '≥1', color: 'bg-amber-500', description: 'Output true when either input is true' },
-  { type: 'NOT', symbol: '¬', color: 'bg-red-500', description: 'Output opposite of input' }
+  { type: 'NOT', symbol: '¬', color: 'bg-red-500', description: 'Output opposite of input' },
+  { type: 'XOR', symbol: '⊕', color: 'bg-purple-500', description: 'Output true when inputs differ' },
+  { type: 'NAND', symbol: '⊼', color: 'bg-indigo-500', description: 'NOT AND - inverted AND gate' },
+  { type: 'NOR', symbol: '⊽', color: 'bg-pink-500', description: 'NOT OR - inverted OR gate' },
+  { type: 'BUFFER', symbol: '1', color: 'bg-green-500', description: 'Passes input unchanged with delay' }
 ];
 
 export function ToolsPanel({ weatherData, isWeatherLoading, onRefreshWeather, onDragStart, circuitOutputs }: ToolsPanelProps) {
@@ -146,6 +150,26 @@ export function ToolsPanel({ weatherData, isWeatherLoading, onRefreshWeather, on
           </CardContent>
         </Card>
 
+        {/* Circuit Templates */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-sm flex items-center">
+              <span>Quick Templates</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Button variant="outline" size="sm" className="w-full justify-start">
+              <span className="text-xs">Half Adder</span>
+            </Button>
+            <Button variant="outline" size="sm" className="w-full justify-start">
+              <span className="text-xs">Weather Alarm</span>
+            </Button>
+            <Button variant="outline" size="sm" className="w-full justify-start">
+              <span className="text-xs">SR Latch</span>
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* Instructions */}
         <Card>
           <CardHeader>
@@ -157,6 +181,8 @@ export function ToolsPanel({ weatherData, isWeatherLoading, onRefreshWeather, on
               <li>• Click connection points to link gates</li>
               <li>• Weather data updates inputs automatically</li>
               <li>• Watch outputs change in real-time</li>
+              <li>• Use templates for quick circuit setup</li>
+              <li>• Monitor performance with AI insights</li>
             </ul>
           </CardContent>
         </Card>

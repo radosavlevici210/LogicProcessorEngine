@@ -36,7 +36,7 @@ export type InsertWeather = z.infer<typeof insertWeatherSchema>;
 export type WeatherData = typeof weatherData.$inferSelect;
 
 // Logic gate types
-export type GateType = 'AND' | 'OR' | 'NOT';
+export type GateType = 'AND' | 'OR' | 'NOT' | 'XOR' | 'NAND' | 'NOR' | 'BUFFER';
 
 export interface LogicGate {
   id: string;

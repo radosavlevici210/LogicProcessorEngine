@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
+
 import { TrendingUp, Zap, Database, Cpu } from "lucide-react";
 import { useWebSocket } from "@/lib/websocket";
 
@@ -80,7 +80,12 @@ export function PerformanceMonitor() {
               {metrics.cpuUsage.toFixed(1)}%
             </Badge>
           </div>
-          <Progress value={metrics.cpuUsage} className="h-2" />
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-blue-600 h-2 rounded-full transition-all duration-300" 
+              style={{ width: `${metrics.cpuUsage}%` }}
+            />
+          </div>
         </div>
 
         {/* Memory Usage */}
@@ -94,7 +99,12 @@ export function PerformanceMonitor() {
               {metrics.memoryUsage.toFixed(1)}%
             </Badge>
           </div>
-          <Progress value={metrics.memoryUsage} className="h-2" />
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-green-600 h-2 rounded-full transition-all duration-300" 
+              style={{ width: `${metrics.memoryUsage}%` }}
+            />
+          </div>
         </div>
 
         {/* Response Time */}

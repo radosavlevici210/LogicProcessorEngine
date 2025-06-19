@@ -74,6 +74,14 @@ export class CircuitEngine {
         return inputValues.some(Boolean);
       case 'NOT':
         return !inputValues[0];
+      case 'XOR':
+        return inputValues.filter(Boolean).length === 1;
+      case 'NAND':
+        return !(inputValues.length > 0 && inputValues.every(Boolean));
+      case 'NOR':
+        return !inputValues.some(Boolean);
+      case 'BUFFER':
+        return Boolean(inputValues[0]);
       default:
         return false;
     }
@@ -99,7 +107,11 @@ export function createGate(type: GateType, position: { x: number; y: number }): 
   const inputsMap: Record<GateType, Record<string, boolean>> = {
     AND: { a: false, b: false },
     OR: { a: false, b: false },
-    NOT: { a: false }
+    NOT: { a: false },
+    XOR: { a: false, b: false },
+    NAND: { a: false, b: false },
+    NOR: { a: false, b: false },
+    BUFFER: { a: false }
   };
 
   return {
