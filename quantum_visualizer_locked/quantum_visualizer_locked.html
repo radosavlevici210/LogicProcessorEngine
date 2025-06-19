@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Quantum Visualizer – Login Required</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0e0e0e;
+      color: #fff;
+    }
+    header {
+      background: #111;
+      padding: 15px 20px;
+      border-bottom: 2px solid #00ffcc;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5em;
+      color: #00ffcc;
+    }
+    #loginPanel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+    }
+    #loginPanel input, #loginPanel button {
+      padding: 10px;
+      margin: 5px;
+      background: #111;
+      border: 1px solid #00ffcc;
+      color: #fff;
+    }
+    .hidden { display: none; }
+    #canvas { width: 100%; height: 500px; border: 1px solid #444; background: transparent; }
+    footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 0.85em;
+      color: #aaa;
+      background: #111;
+      border-top: 1px solid #333;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🔒 Secure Quantum Visualizer</h1>
+</header>
+
+<div id="loginPanel">
+  <p>Please enter your authorized email to access the application:</p>
+  <input type="email" id="emailInput" placeholder="Enter your email..." />
+  <button onclick="verifyAccess()">Unlock</button>
+  <p id="errorMsg" style="color:red; display:none;">Access denied. Unauthorized user.</p>
+</div>
+
+<div class="app-container hidden" id="app">
+  <div class="controls" style="padding: 20px;">
+    <input type="file" id="fileInput" accept=".csv" />
+    <button onclick="copyVisualization()">📸 Copy Image</button>
+    <button onclick="copyAsSVG()">🖼️ Copy SVG</button>
+  </div>
+  <canvas id="canvas"></canvas>
+</div>
+
+<footer>
+  &copy; 2025 Radosavlevici Ervin Remus<br>
+  Emails: Ervin210@icloud.com | radosavlevici210@icloud.com | radosavlevic.Ervin@gmail.com<br>
+  IBAN: GB45 NAIA 0708 0620 7951 39 | BIC: NAIAGB21 | SWIFT: MIDLGB22
+</footer>
+
+<script>
+let scene, camera, renderer, objects = [];
+const authorizedEmails = [
+  "Ervin210@icloud.com",
+  "radosavlevici210@icloud.com",
+  "radosavlevic.Ervin@gmail.com"
+];
+
+function verifyAccess() {
+  const email = document.getElementById("emailInput").value.trim();
+  if (authorizedEmails.includes(email)) {
+    document.getElementById("loginPanel").style.display = "none";
+    document.getElementById("app").classList.remove("hidden");
+    initScene();
+    animate();
+  } else {
+    document.getElementById("errorMsg").style.display = "block";
+  }
+}
+
+function getDeviceFingerprint() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    const debugInfo = gl ? gl.getExtension('WEBGL_debug_renderer_info') : null;
+    const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'unknown';
+    const userAgent = navigator.userAgent;
+    const hash = btoa(userAgent + renderer + Date.now());
+    return hash.substring(0, 16);
+}
+
+function initScene() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / 500, 0.1, 1000);
+    renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), alpha: true, antialias: true });
+    renderer.setSize(window.innerWidth, 500);
+    camera.position.z = 10;
+}
+
+function renderData(data) {
+    objects.forEach(obj => scene.remove(obj));
+    objects = [];
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(5, 3, 5);
+    scene.add(directionalLight);
+    scene.add(new THREE.AmbientLight(0x404040, 0.5));
+
+    data.forEach(row => {
+        const height = row.value || 1;
+        const geometry = new THREE.BoxGeometry(0.5, height, 0.5);
+        const material = new THREE.MeshStandardMaterial({ 
+            color: 0x00ff00,
+            metalness: 0.5,
+            roughness: 0.4
+        });
+        const bar = new THREE.Mesh(geometry, material);
+        bar.position.set(row.x || 0, height / 2, row.y || 0);
+        scene.add(bar);
+        objects.push(bar);
+    });
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    objects.forEach(obj => obj.rotation.y += 0.01);
+    renderer.render(scene, camera);
+}
+
+function copyVisualization() {
+    const fingerprint = getDeviceFingerprint();
+    const dataUrl = renderer.domElement.toDataURL('image/png');
+    const html = `<img src="${dataUrl}" alt="Visualization by Radosavlevici © 2025 | Device: ${fingerprint}" style="max-width:100%;">`;
+    navigator.clipboard.writeText(html)
+        .then(() => alert('Image copied with fingerprint!'))
+        .catch(() => alert('Failed to copy image'));
+}
+
+function copyAsSVG() {
+    const fingerprint = getDeviceFingerprint();
+    let svg = `<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="20" font-size="12">Visualization by Radosavlevici © 2025 | Device: ${fingerprint}</text>`;
+    objects.forEach(obj => {
+        const pos = obj.position;
+        svg += `<rect x="${(pos.x + 5) * 80}" y="${(5 - pos.z) * 50}" width="40" height="${obj.geometry.parameters.height * 50}" fill="green" />`;
+    });
+    svg += `</svg>`;
+    navigator.clipboard.writeText(svg)
+        .then(() => alert('SVG copied!'))
+        .catch(() => alert('Failed to copy SVG'));
+}
+
+document.getElementById('fileInput')?.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        Papa.parse(file, {
+            complete: (result) => {
+                const data = result.data.map(row => ({
+                    x: parseFloat(row[0]) || 0,
+                    y: parseFloat(row[1]) || 0,
+                    value: parseFloat(row[2]) || 1
+                }));
+                renderData(data);
+            },
+            header: false
+        });
+    }
+});
+</script>
+</body>
+</html>

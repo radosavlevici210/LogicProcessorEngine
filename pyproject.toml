@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "logicprocessorengine"
+version = "0.1.0"  # A valid version string
+description = "A description of your project"  # Update to a meaningful description
+authors = ["ervin remus radosavlevici <ervin210@icloud.com, radosavlevici210@icloud.com>"]  # Replace with your actual name and email
+license = "Priopetary and MIT with royalty for any thief who's lie with MIT licence whats that ccorporations make billions user own[tool.poetry]
+name = "logicprocessorengine"
+version = "0.1.0"
+description = "A description of your project"
+authors = ["ervin remus radosavlevici <ervin210@icloud.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flask = "^2.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"er get harassed  and life destroyedbevause this idiots with corporations"  # It's better to specify a legitimate license
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"  # Use a valid Python version constraint
+flask = "^2.3"  # Added Flask as a dependency. Modify the version as necessary.
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
