@@ -6,6 +6,9 @@ import { useWeather } from '@/hooks/useWeather';
 import { ToolsPanel } from '@/components/ToolsPanel';
 import { CircuitCanvas } from '@/components/CircuitCanvas';
 import { OutputPanel } from '@/components/OutputPanel';
+import { SystemStatus } from '@/components/SystemStatus';
+import { AIInsights } from '@/components/AIInsights';
+import { PerformanceMonitor } from '@/components/PerformanceMonitor';
 
 import { Button } from '@/components/ui/button';
 import { Microchip, Save, Share, Settings } from 'lucide-react';
@@ -194,15 +197,38 @@ export default function CircuitBuilder() {
           </div>
 
 
+          {/* AI Insights Panel */}
+          <div className="h-80 border-t border-slate-200 bg-white p-4 overflow-y-auto">
+            <AIInsights
+              gates={circuitState.gates}
+              connectionCount={circuitState.connections.length}
+              weatherInput={weatherData.logicState}
+            />
+          </div>
         </div>
 
-        {/* Output Panel */}
-        <OutputPanel
-          gates={circuitState.gates}
-          connectionCount={circuitState.connections.length}
-          weatherInput={weatherData.logicState}
-          systemLogs={systemLogs}
-        />
+        {/* Right Sidebar */}
+        <div className="w-80 bg-white border-l border-slate-200 flex flex-col overflow-hidden">
+          {/* System Status */}
+          <div className="p-4 border-b border-slate-200">
+            <SystemStatus />
+          </div>
+
+          {/* Performance Monitor */}
+          <div className="p-4 border-b border-slate-200">
+            <PerformanceMonitor />
+          </div>
+
+          {/* Output Panel */}
+          <div className="flex-1 overflow-y-auto">
+            <OutputPanel
+              gates={circuitState.gates}
+              connectionCount={circuitState.connections.length}
+              weatherInput={weatherData.logicState}
+              systemLogs={systemLogs}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
